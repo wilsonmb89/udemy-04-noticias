@@ -22,6 +22,10 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.statusBar.styleLightContent();
       this.splashScreen.hide();
+      this.platform.backButton.subscribeWithPriority(0, () => {
+        // tslint:disable-next-line: no-string-literal
+        navigator['app'].exitApp();
+      });
     });
   }
 }
