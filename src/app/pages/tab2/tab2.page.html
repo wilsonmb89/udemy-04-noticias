@@ -1,0 +1,31 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="dark">
+    <ion-title>
+      Para Ti
+    </ion-title>
+  </ion-toolbar>
+  <ion-segment #categoriasSegment scrollable="true" mode="md" color="primary" (ionChange)="setTopic($event)">
+    <ion-segment-button mode="md" *ngFor="let categoria of categorias" [value]="categoria.key">
+      <ion-label class="ion-text-capitalize">{{ categoria.value }}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-header>
+
+<ion-content color="dark">
+  <ion-refresher color="dark" slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-down-outline"
+      pullingText="Arrastre para actualizar"
+      refreshingSpinner="crescent"
+      refreshingText="Actualizando Noticias...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <app-noticias [noticias]="noticias"></app-noticias>
+  <ion-infinite-scroll #infiniteScrollNoticias
+                        threshold="150px"
+                        (ionInfinite)="loadNextPage($event)">
+    <ion-infinite-scroll-content loadingSpiner="crescent"
+                                  loadingText="Obteniendo más noticias...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

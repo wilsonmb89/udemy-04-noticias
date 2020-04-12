@@ -1,0 +1,19 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="dark">
+    <ion-title>
+      Favoritos
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="dark">
+  <div class="no-result-wrapper" *ngIf="noticias.length === 0">
+    <ion-item color="dark">
+      <img class="no-results-img" src="assets/img/icons/icon-no-results.svg">
+    </ion-item>
+    <ion-item class="ion-text-center" color="dark">
+      <ion-label>No hay ningún favorito almacenado</ion-label>
+    </ion-item>
+  </div>
+  <app-noticias [noticias]="noticias" (refreshEventEmitter)="actualizarFavoritos($event)"></app-noticias>
+</ion-content>
