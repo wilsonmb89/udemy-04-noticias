@@ -9,7 +9,7 @@
         </ion-button>
       </div>
     </ion-card-subtitle>
-    <ion-card-title (click)="abrirNoticia(noticia.url)">
+    <ion-card-title (click)="abrirNoticia()">
       <ion-label>{{ noticia.title }}</ion-label>
     </ion-card-title>
     <ion-img *ngIf="!!noticia.urlToImage" [src]="noticia.urlToImage" (click)="abrirNoticia()"></ion-img>

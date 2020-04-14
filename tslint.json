@@ -4,6 +4,7 @@
     "codelyzer"
   ],
   "rules": {
+    "no-string-literal": false,
     "variable-name": {
       "options": [
         "allow-leading-underscore"

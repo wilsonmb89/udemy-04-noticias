@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { ActionSheetController, ToastController } from '@ionic/angular';
+import { ActionSheetController, ToastController, Platform } from '@ionic/angular';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { DataLocalService } from 'src/app/services/data-local.service';
 
@@ -20,7 +20,8 @@ export class NoticiaComponent implements OnInit {
     private _actionSheetController: ActionSheetController,
     private _socialSharing: SocialSharing,
     private _dataLocalService: DataLocalService,
-    private _toastController: ToastController
+    private _toastController: ToastController,
+    private _platform: Platform
   ) { }
 
   ngOnInit() {}
@@ -37,12 +38,7 @@ export class NoticiaComponent implements OnInit {
           icon: 'share',
           cssClass: 'action-dark',
           handler: () => {
-            this._socialSharing.share(
-              this.noticia.title,
-              this.noticia.source.name,
-              null,
-              this.noticia.url
-            );
+            this.shareNews();
           }
         }, {
           text: (!!this.noticia.isFavorite ? 'Quitar Favorito' : 'Guardar Favorito'),
@@ -73,14 +69,37 @@ export class NoticiaComponent implements OnInit {
     await actionSheet.present();
   }
 
-  async showToast(mensaje: string) {
+  async showToast(mensaje: string, duracion?: number) {
+    duracion = duracion || 1500;
     const toast = await this._toastController.create({
       message: mensaje,
-      duration: 1500,
+      duration: duracion,
       cssClass: 'favorito-toast',
       mode: 'ios',
       animated: true
     });
     toast.present();
+  }
+
+  shareNews() {
+    if (this._platform.is('cordova')) {
+      this._socialSharing.share(
+        this.noticia.title,
+        this.noticia.source.name,
+        null,
+        this.noticia.url
+      );
+    } else {
+      if (navigator['share']) {
+        navigator['share']({
+          title: this.noticia.title,
+          text: this.noticia.description,
+          url: this.noticia.url,
+        }).then(() => console.log('Successful share'))
+          .catch((error) => console.log('Error sharing', error));
+      } else {
+        this.showToast('Función no soportada por el navegador', 2000);
+      }
+    }
   }
 }
